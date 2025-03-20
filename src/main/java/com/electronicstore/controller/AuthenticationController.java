@@ -174,17 +174,20 @@ public class AuthenticationController {
 			String locale = (String) payload.get("locale");
 			String familyName = (String) payload.get("family_name");
 			String givenName = (String) payload.get("given_name"); 
+			String gender=(String)payload.get("gender");
 			
 			logger.info("Name {}",name);
 			logger.info("Email {}",email);
 			logger.info("PictireUrl {}",pictureUrl);
 			logger.info("username {}",username);
+			logger.info("gender {}",gender);
 			
 			
 			UserDto userDto = new UserDto();
 			userDto.setName(name);
 			userDto.setEmail(email);
 			userDto.setImageName(pictureUrl);
+			userDto.setGender(gender);
 			userDto.setPassword(googleProviderDefaultPassword);
 			userDto.setAbout("user is created using google");
 			userDto.setProvider(Providers.GOOGLE);
