@@ -10,9 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AddItemToCartRequest {
-
     private  String productId;
-
     private  int quantity;
 
 }

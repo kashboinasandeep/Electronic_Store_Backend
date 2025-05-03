@@ -13,15 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.authentication.UserServiceBeanDefinitionParser;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.electronicstore.dto.GoogleLoginRequest;
@@ -43,11 +40,9 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.apache.v2.ApacheHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 
-import io.swagger.annotations.Api;
-
 @RestController
 @RequestMapping("/auth")
-@Api(value = "AuthController",description = "API For Authentication!!!")
+//@Api(value = "AuthController",description = "API For Authentication!!!")
 public class AuthenticationController {
 	
 	@Autowired
@@ -244,3 +239,5 @@ public class AuthenticationController {
 	
 	
 }
+
+

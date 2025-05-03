@@ -27,12 +27,11 @@ import com.electronicstore.dto.ProductDto;
 import com.electronicstore.service.FileService;
 import com.electronicstore.service.ProductService;
 
-import io.swagger.annotations.Api;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/products")
-@Api(value = "ProductController",description = "API For products!!!")
+//@Api(value = "ProductController",description = "API For products!!!")
 public class ProductController {
 
     @Autowired

@@ -22,12 +22,12 @@ import com.electronicstore.dto.OrderDto;
 import com.electronicstore.dto.PageableResponse;
 import com.electronicstore.service.OrderService;
 
-import io.swagger.annotations.Api;
+
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/orders")
-@Api(value = "OrderController",description = "API For Making Orders!!!")
+//@Api(value = "OrderController",description = "API For Making Orders!!!")
 public class OrderController {
 
     @Autowired

@@ -1,73 +1,50 @@
 package com.electronicstore.config;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.Components;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.SecurityReference;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.contexts.SecurityContext;
-import springfox.documentation.spring.web.plugins.ApiSelectorBuilder;
-import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 public class SwaggerConfig {
 
+    private static final String SECURITY_SCHEME_NAME = "bearerAuth"; // changed from JWT
+
     @Bean
-    public Docket docket() {
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
-                .securityContexts(Arrays.asList(getSecurityContext()))
-                .securitySchemes(Arrays.asList(getSecuritySchemes()));
-
-        ApiSelectorBuilder select = docket.select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any());
-
-        return select.build();
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(apiInfo())
+                .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
+                .components(new Components()
+                        .addSecuritySchemes(SECURITY_SCHEME_NAME, jwtSecurityScheme()));
     }
 
-    
-    private SecurityContext getSecurityContext() {
-    	SecurityContext context = SecurityContext
-    			.builder()
-    			.securityReferences(getSecurityReferences())
-    			.build();
-    			return context;
-    }
-    
-    
-    private List<SecurityReference> getSecurityReferences() {
-    	
-       AuthorizationScope[] scopes = {new AuthorizationScope("Global", "Acess Every Thing")  };
-     
-       return Arrays.asList(new SecurityReference("JWT", scopes));
-    }
-    
-    
-
-    private ApiKey getSecuritySchemes() {
-        return new ApiKey("JWT", "Authorization", "header");
+    private Info apiInfo() {
+        return new Info()
+                .title("Electronic Store Backend API")
+                .description("This is an Electronic Store project using Java Spring Boot and React.")
+                .version("1.0.0")
+                .termsOfService("https://www.code_learners.com")
+                .contact(new Contact()
+                        .name("Nagaraju")
+                        .url("https://www.instagram.com/abcd")
+                        .email("nagaraju1819@gmail.com"))
+                .license(new io.swagger.v3.oas.models.info.License()
+                        .name("LICENSES OF API")
+                        .url("https://www.learncodes.com/about"));
     }
 
-    private ApiInfo getApiInfo() {
-        return new ApiInfo(
-                "Electronic Store Backend API",
-                "This is an Electronic Store project using Java Spring Boot and React.",
-                "1.0.0",
-                "https://www.code_learners.com",
-                new Contact("Nagaraju", "https://www.instagram.com/abcd", "nagaraju1819@gmail.com"),
-                "LICENSES OF API",
-                "https://www.learncodes.com/about",
-                Collections.emptyList()
-        );
+    private SecurityScheme jwtSecurityScheme() {
+        return new SecurityScheme()
+                .name("Authorization")
+                .description("JWT token header using the Bearer scheme. Example: 'Bearer {token}'")
+                .in(SecurityScheme.In.HEADER)
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("bearer")
+                .bearerFormat("JWT");
     }
 }

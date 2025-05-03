@@ -30,13 +30,12 @@ import com.electronicstore.entity.Providers;
 import com.electronicstore.service.FileService;
 import com.electronicstore.service.UserService;
 
-import io.swagger.annotations.Api;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
-@Api(value = "UserController",description = "API For Users !!!")
+//@Api(value = "UserController",description = "API For Users !!!")
 public class UserController {
 
     @Autowired
@@ -138,3 +137,4 @@ public class UserController {
     }
 
 }
+

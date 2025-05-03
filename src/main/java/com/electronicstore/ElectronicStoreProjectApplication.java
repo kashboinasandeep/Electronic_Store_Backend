@@ -46,7 +46,7 @@ public class ElectronicStoreProjectApplication implements CommandLineRunner {
 		Role roleAdmin = roleRepository.findByName("ROLE_"+AppConstants.ROLE_ADMIN).orElse(null);
 		if (roleAdmin == null) {
 		    Role r1 = new Role();
-		    r1.setRoleId(UUID.randomUUID().toString());
+		    r1.setRoleId("wetrsdfwetwfasfwdf");
 		    r1.setName("ROLE_"+AppConstants.ROLE_ADMIN);
 		    roleAdmin = roleRepository.save(r1); // ✅ Save and reassign
 		}

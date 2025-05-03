@@ -1,5 +1,5 @@
-package com.electronicstore.config;
 
+package com.electronicstore.config;
 
 import java.util.List;
 
@@ -11,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,111 +25,71 @@ import com.electronicstore.security.JwtAuthenticationFilter;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
-//@EnableWebSecurity(debug = true)
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationFilter filter;
+
     @Autowired
     private JwtAuthenticationEntryPoint entryPoint;
-    
-    public static final String[] PUBLIC_URLS = {
-    		"/v3/api-docs",
-    		"/v2/api-docs",
-    		"/api/v1/auth/**",
-    		"/swagger-ui/**",
-    		"/webjars/**",
-    		"/swagger-resources/**"
-    };
-    
 
-    //    SecurityFilterChain beans
+    public static final String[] PUBLIC_URLS = {
+        "/api/v1/auth/**",
+        "/swagger-ui/**",
+        "/v3/api-docs/**",
+        "/swagger-ui.html",
+        "/swagger-resources/**",
+        "/webjars/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
-        //configurations
 
-        //urls
-        //public koun se protected
-        //koun se urls admin, koun se normal user.
+        security.cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration corsConfiguration = new CorsConfiguration();
+                corsConfiguration.setAllowedOriginPatterns(List.of("*"));
+                corsConfiguration.setAllowedMethods(List.of("*"));
+                corsConfiguration.setAllowCredentials(true);
+                corsConfiguration.setAllowedHeaders(List.of("*"));
+                corsConfiguration.setMaxAge(4000L);
+                return corsConfiguration;
+            }
+        }));
 
+        security.csrf(csrf -> csrf.disable());
 
-        //configuring urls
-        //cors ko hame abhi ke lie disable kiy hai
-        //isko ham log baad mein sikhenge
-//        security.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.disable());
-        //csrf ko hame abhi ke lie disable kiy hai
-
-        security.cors(httpSecurityCorsConfigurer ->
-                        httpSecurityCorsConfigurer.configurationSource(new CorsConfigurationSource() {
-                            @Override
-                            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                                CorsConfiguration corsConfiguration = new CorsConfiguration();
-
-                                //origins
-                                //methods
-//                        corsConfiguration.addAllowedOrigin("http://localhost:4200");
-
-//                                =corsConfiguration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:4300", "http://localhost:4300"));
-                                corsConfiguration.setAllowedOriginPatterns(List.of("*"));
-                                corsConfiguration.setAllowedMethods(List.of("*"));
-                                corsConfiguration.setAllowCredentials(true);
-                                corsConfiguration.setAllowedHeaders(List.of("*"));
-                                corsConfiguration.setMaxAge(4000L);
-
-
-                                return corsConfiguration;
-                            }
-                        })
+        security.authorizeHttpRequests(auth -> auth
+            .requestMatchers(PUBLIC_URLS).permitAll()
+            .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/users/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+            .requestMatchers("/products/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/users/**").permitAll()
+            .requestMatchers(HttpMethod.POST, "/users").permitAll()
+            .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
+            .requestMatchers("/categories/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.POST,"/auth/generate-token","/auth/login-with-google").permitAll()
+            .requestMatchers("/auth/**").authenticated()
+            .anyRequest().permitAll()
         );
 
-        //isko ham log baad mein sikhenge
-        security.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
-
-        security.authorizeHttpRequests(request ->
-                request.requestMatchers(HttpMethod.DELETE, "/users/**").hasRole(AppConstants.ROLE_ADMIN).
-                        requestMatchers(HttpMethod.PUT, "/users/**").hasAnyRole(AppConstants.ROLE_ADMIN, AppConstants.ROLE_NORMAL)
-                        .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-                        .requestMatchers("/products/**").hasRole(AppConstants.ROLE_ADMIN)
-                        .requestMatchers(HttpMethod.GET, "/users/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
-                        .requestMatchers("/categories/**").hasRole(AppConstants.ROLE_ADMIN)
-                        .requestMatchers(HttpMethod.POST, "/auth/generate-token", "/auth/login-with-google", "/auth/regenerate-token").permitAll()
-                        .requestMatchers(PUBLIC_URLS).permitAll()
-                        .requestMatchers("/auth/**").authenticated()
-                        .anyRequest().permitAll()
-
-
-        );
-
-        //kis type ki security:
-//        security.httpBasic(Customizer.withDefaults());
-
-        //entry point
         security.exceptionHandling(ex -> ex.authenticationEntryPoint(entryPoint));
-
-        //session creation policy
-        security.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        //main -->
+        security.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         security.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
         return security.build();
-
     }
 
-
-    //    password encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
-        return builder.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
-
 }
-

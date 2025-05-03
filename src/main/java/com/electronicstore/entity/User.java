@@ -34,7 +34,7 @@ import lombok.ToString;
 @Builder
 @ToString
 
-public class User  implements UserDetails{
+public class User implements UserDetails{
 
 	
 	 @Id
@@ -87,10 +87,33 @@ public class User  implements UserDetails{
 			// TODO Auto-generated method stub
 			return password;
 		}
+
+		@Override
+		public boolean isAccountNonExpired() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+		@Override
+		public boolean isAccountNonLocked() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+		@Override
+		public boolean isCredentialsNonExpired() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+		@Override
+		public boolean isEnabled() {
+			// TODO Auto-generated method stub
+			return true;
+		}
 		
 		
 		
 
 
 }
-

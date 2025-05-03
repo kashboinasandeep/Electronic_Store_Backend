@@ -20,12 +20,12 @@ import com.electronicstore.dto.ProductDto;
 import com.electronicstore.service.CategoryService;
 import com.electronicstore.service.ProductService;
 
-import io.swagger.annotations.Api;
+
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/categories")
-@Api(value = "CategoryController",description = "API For Category of products!!!")
+//@Api(value = "CategoryController",description = "API For Category of products!!!")
 public class CategoryController {
 
     @Autowired

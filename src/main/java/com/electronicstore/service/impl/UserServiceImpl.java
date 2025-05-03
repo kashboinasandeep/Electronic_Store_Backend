@@ -88,7 +88,10 @@ public class UserServiceImpl implements UserService {
         //email update
         user.setAbout(userDto.getAbout());
         user.setGender(userDto.getGender());
+        
+        if(!userDto.getPassword().equalsIgnoreCase(user.getPassword()))
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        
         user.setImageName(userDto.getImageName());
 
         //save data
