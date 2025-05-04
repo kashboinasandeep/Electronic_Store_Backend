@@ -1,4 +1,3 @@
-
 package com.electronicstore.config;
 
 import java.util.List;
@@ -35,12 +34,12 @@ public class SecurityConfig {
     private JwtAuthenticationEntryPoint entryPoint;
 
     public static final String[] PUBLIC_URLS = {
-        "/api/v1/auth/**",
-        "/swagger-ui/**",
-        "/v3/api-docs/**",
+        "/api/v1/auth/",
+        "/swagger-ui/",
+        "/v3/api-docs/",
         "/swagger-ui.html",
-        "/swagger-resources/**",
-        "/webjars/**"
+        "/swagger-resources/",
+        "/webjars/"
     };
 
     @Bean
@@ -63,16 +62,16 @@ public class SecurityConfig {
 
         security.authorizeHttpRequests(auth -> auth
             .requestMatchers(PUBLIC_URLS).permitAll()
-            .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
-            .requestMatchers(HttpMethod.PUT, "/users/**").permitAll()
-            .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-            .requestMatchers("/products/**").hasRole("ADMIN")
-            .requestMatchers(HttpMethod.GET, "/users/**").permitAll()
+            .requestMatchers(HttpMethod.DELETE, "/users/").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/users/").permitAll()
+            .requestMatchers(HttpMethod.GET, "/products/").permitAll()
+            .requestMatchers("/products/").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/users/").permitAll()
             .requestMatchers(HttpMethod.POST, "/users").permitAll()
-            .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
-            .requestMatchers("/categories/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.GET, "/categories/").permitAll()
+            .requestMatchers("/categories/").hasRole("ADMIN")
             .requestMatchers(HttpMethod.POST,"/auth/generate-token","/auth/login-with-google").permitAll()
-            .requestMatchers("/auth/**").authenticated()
+            .requestMatchers("/auth/").authenticated()
             .anyRequest().permitAll()
         );
 
