@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ import com.electronicstore.dto.ApiResponseMessage;
 import com.electronicstore.dto.CreateOrderRequest;
 import com.electronicstore.dto.OrderDto;
 import com.electronicstore.dto.PageableResponse;
+import com.electronicstore.dto.UpdateOrderRequest;
 import com.electronicstore.service.OrderService;
 
 
@@ -78,6 +80,16 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
+    @PutMapping("/{orderId}")
+    @PreAuthorize("hasRole('" + AppConstants.ROLE_ADMIN + "')")
+    public ResponseEntity<OrderDto> updateOrder(
+            @PathVariable String orderId,
+            @RequestBody UpdateOrderRequest request) {
+
+        OrderDto dto = orderService.updateOrderStatus(orderId, request);
+
+        return ResponseEntity.ok(dto);
+    }
 
 }
 

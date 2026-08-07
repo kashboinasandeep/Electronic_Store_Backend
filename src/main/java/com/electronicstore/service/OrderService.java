@@ -5,6 +5,7 @@ import java.util.List;
 import com.electronicstore.dto.CreateOrderRequest;
 import com.electronicstore.dto.OrderDto;
 import com.electronicstore.dto.PageableResponse;
+import com.electronicstore.dto.UpdateOrderRequest;
 
 public interface OrderService {
 
@@ -21,5 +22,6 @@ public interface OrderService {
     PageableResponse<OrderDto> getOrders(int pageNumber, int pageSize, String sortBy, String sortDir);
 
     //order methods(logic) related to order
+    OrderDto updateOrderStatus(String orderId, UpdateOrderRequest request);
 
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.electronicstore.dto.CreateOrderRequest;
 import com.electronicstore.dto.OrderDto;
 import com.electronicstore.dto.PageableResponse;
+import com.electronicstore.dto.UpdateOrderRequest;
 import com.electronicstore.entity.Cart;
 import com.electronicstore.entity.CartItem;
 import com.electronicstore.entity.Order;
@@ -128,5 +129,22 @@ public class OrderServiceImpl implements OrderService {
         Page<Order> page = orderRepository.findAll(pageable);
         return Helper.getPageableResponse(page, OrderDto.class);
     }
+
+
+	@Override
+	public OrderDto updateOrderStatus(String orderId,
+	                                  UpdateOrderRequest request) {
+
+	    Order order = orderRepository.findById(orderId)
+	            .orElseThrow(() ->
+	                    new ResourceNotFoundException("order is not found"));
+
+	    order.setOrderStatus(request.getOrderStatus());
+	    order.setPaymentStatus(request.getPaymentStatus());
+
+	    Order saved = orderRepository.save(order);
+
+	    return modelMapper.map(saved, OrderDto.class);
+	}
 }
 
