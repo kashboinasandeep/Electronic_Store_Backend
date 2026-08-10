@@ -1,5 +1,5 @@
 # Use an official OpenJDK image as the base image
-FROM openjdk:18-alpine
+FROM openjdk:17-alpine
 
 ARG JAR_FILE=target/*.jar
 	
