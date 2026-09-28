@@ -94,6 +94,10 @@ Swagger API Documentation: https://electronic-store-backend-pgl0.onrender.com/sw
 
 > Note: hosted on a free tier — first load may take up to a minute to spin up.
 
+ ## 📄 Documentation
+
+Detailed API documentation: [Electronics-Store-API-Documentation.pdf](./Electronics-Store-API-Documentation.pdf)
+
 ##  Author
 
 **Sandeep Kashaboina**
