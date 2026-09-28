@@ -59,25 +59,29 @@ public class ElectronicStoreProjectApplication implements CommandLineRunner {
 		    roleNormal = roleRepository.save(r2); // ✅ Save and reassign
 		}
 
-		User user = userRepository.findByEmail("nagaraju@gmail.com").orElse(null);
+		//=====================================================================CREATING ADMIN USER=========================================================
+
+		String adminEmail = System.getenv("ADMIN_EMAIL") != null ? System.getenv("ADMIN_EMAIL") : "admin@example.com";
+		String adminPassword = System.getenv("ADMIN_PASSWORD") != null ? System.getenv("ADMIN_PASSWORD") : "ChangeThisPassword123!";
+
+		User user = userRepository.findByEmail(adminEmail).orElse(null);
 		if (user == null) {
 		    user = new User();
 		    user.setUserId(UUID.randomUUID().toString());
-		    user.setName("nagaraju");
-		    user.setEmail("nagaraju@gmail.com");
-		    user.setPassword(passwordEncoder.encode("nagaraju"));
+		    user.setName("admin");
+		    user.setEmail(adminEmail);
 		    user.setGender("male");
 		    user.setAbout("admin");
-		    user.setImageName("nagaraju.png");
+		    user.setImageName("default.png");
 
 		    if (roleAdmin != null) {
 		        user.setRoles(List.of(roleAdmin)); // ✅ Avoid NullPointerException
 		    } else {
 		        System.out.println("Error: roleAdmin is null!");
 		    }
-
-		    userRepository.save(user);
 		}
+		user.setPassword(passwordEncoder.encode(adminPassword));
+		userRepository.save(user);
 
 
 	}}
